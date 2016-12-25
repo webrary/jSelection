@@ -1,0 +1,20 @@
+{
+  "name": "jselection",
+  "description": "extended selection",
+  "main": "index.js",
+  "authors": [
+    "ming"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/webrary/jSelection",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jQuery": "^3.1.1"
+  }
+}
