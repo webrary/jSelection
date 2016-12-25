@@ -2,7 +2,7 @@
   "name": "jselection",
   "version": "0.1.1",
   "description": "Example git project that is used for typescript libraries as a starter pack",
-  "main": "dist/main.js",
+  "main": "dist/jSelection.js",
   "typings": "dist/jSelection.d.ts",
   "jam": {
     "main": "./dist/jSelection.browser.js"
