@@ -1,2 +1,4 @@
-export {XSelection} from "./xSelection";
-export {XWindow} from "./xWindow";
+import {XWindow} from './xWindow';
+import {XSelection} from './xSelection';
+
+export {XWindow, XSelection};

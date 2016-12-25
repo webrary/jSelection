@@ -81,7 +81,7 @@ var bundle_opts = {
     // if you want to load all .d.ts files from a path recursively you can use "path/project/**/*.d.ts"
     //  ^ *** Experimental, TEST NEEDED, see "All .d.ts files" section
     // - either relative or absolute
-    main: 'src/main.d.ts',
+    main: 'src/index.d.ts',
 
     // Optional
 
@@ -135,7 +135,7 @@ var bundle_opts = {
 };
 
 var webpack_opts = {
-    entry: './src/main.ts',
+    entry: './src/index.ts',
     target: 'node',
     output: {
         filename: libPath('jSelection.js'),
@@ -160,7 +160,7 @@ var webpack_opts = {
         emitErrors: true,
         failOnHint: true
     }
-}
+};
 
 var create_browser_version = function (inputJs) {
     let outputName = inputJs.replace(/\.[^/.]+$/, "");
@@ -177,6 +177,6 @@ var create_browser_version = function (inputJs) {
             console.error(err);
         }
     }).pipe(fs.createWriteStream(outputName));
-}
+};
 
 module.exports = webpack_opts;
