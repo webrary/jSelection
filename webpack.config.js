@@ -92,7 +92,7 @@ var bundle_opts = {
     // if starts with "~/" then is relative to current path. See https://github.com/TypeStrong/dts-bundle/issues/26
     //  ^ *** Experimental, TEST NEEDED
     // - default: "<baseDir>/<name>.d.ts"
-    out: '../dist/main.d.ts',
+    out: '../dist/jselection.d.ts',
     // include typings outside of the 'baseDir' (i.e. like node.d.ts)
     // - default: false
     externals: false,
