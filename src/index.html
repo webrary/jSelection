@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="application/javascript" src="../bower_components/jQuery/dist/jquery.js"></script>
+    <script type="application/javascript" src="xString.js"></script>
+    <script type="application/javascript" src="xWindow.js"></script>
+    <script type="application/javascript" src="xSelection.js"></script>
+    <style>
+        .markup{
+            background-color: yellowgreen;
+        }
+    </style>
+</head>
+<body>
+haha
+<div id="body">
+    this is a test
+    <span>this is a test</span>
+    this is a test
+    <p> this is a test </p>
+    this is a test
+</div>
+<script type="application/javascript">
+    var xWindow = jSelection.XWindow.from(document.querySelector("#body"));
+    console.log(xWindow.getNodes());
+    var xSelection = xWindow.select("a test", 5);
+    var nodes = xSelection.getTextNodes();
+    console.log(nodes);
+    var markup = $(nodes[0]).wrapAll("<span class='markup'/>");
+</script>
+</body>
+</html>
