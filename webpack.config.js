@@ -76,7 +76,7 @@ var bundle_opts = {
 
     // name of module likein package.json
     // - used to declare module & import/require
-    name: 'jselection',
+    name: 'jSelection',
     // path to entry-point (generated .d.ts file for main module)
     // if you want to load all .d.ts files from a path recursively you can use "path/project/**/*.d.ts"
     //  ^ *** Experimental, TEST NEEDED, see "All .d.ts files" section
@@ -92,7 +92,7 @@ var bundle_opts = {
     // if starts with "~/" then is relative to current path. See https://github.com/TypeStrong/dts-bundle/issues/26
     //  ^ *** Experimental, TEST NEEDED
     // - default: "<baseDir>/<name>.d.ts"
-    out: '../dist/jselection.d.ts',
+    out: '../dist/jSelection.d.ts',
     // include typings outside of the 'baseDir' (i.e. like node.d.ts)
     // - default: false
     externals: false,
@@ -138,7 +138,7 @@ var webpack_opts = {
     entry: './src/main.ts',
     target: 'node',
     output: {
-        filename: libPath('jselection.js'),
+        filename: libPath('jSelection.js'),
         libraryTarget: "commonjs2"
     },
     resolve: {

@@ -1,6 +1,6 @@
-# jselection
-[![NPM version](https://img.shields.io/npm/v/jselection.svg)](https://www.npmjs.com/package/jselection)
-[![Build Status](https://travis-ci.org/DxCx/jselection.svg?branch=master)](https://travis-ci.org/DxCx/jselection)
+# jSelection
+[![NPM version](https://img.shields.io/npm/v/jSelection.svg)](https://www.npmjs.com/package/jselection)
+[![Build Status](https://travis-ci.org/DxCx/jSelection.svg?branch=master)](https://travis-ci.org/DxCx/jselection)
 [![Coverage Status](https://coveralls.io/repos/github/DxCx/jselection/badge.svg?branch=master)](https://coveralls.io/github/DxCx/jselection?branch=master)
 [![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 

@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "description": "Example git project that is used for typescript libraries as a starter pack",
   "main": "dist/main.js",
-  "typings": "dist/jselection.d.ts",
+  "typings": "dist/jSelection.d.ts",
   "jam": {
-    "main": "./dist/jselection.browser.js"
+    "main": "./dist/jSelection.browser.js"
   },
   "browser": {
-    "dist/main.js": "./dist/jselection.browser.js"
+    "dist/main.js": "./dist/jSelection.browser.js"
   },
   "scripts": {
     "prebuild": "npm install",
