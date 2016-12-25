@@ -7,13 +7,48 @@ declare module 'jSelection' {
 }
 
 declare module 'jSelection/xWindow' {
-	
+	import { XText, XSelection } from "jSelection/xSelection";
+	export class XWindow {
+			constructor(root: Element);
+			/**
+				* @param {string=} opt_text
+				* @param {number=} opt_nth
+				* @param {boolean=} opt_select = false whether to select the range
+				* @return {XSelection}
+				*/
+			select(opt_text?: string, opt_nth?: number, opt_select?: boolean): XSelection;
+			init(root: Element): void;
+			static from(root?: Element): XWindow;
+			getNodes(): Array<XText>;
+			getText(): String;
+			getWindow(): Window;
+	}
 }
 
 declare module 'jSelection/xSelection' {
+	import { XWindow } from "jSelection/xWindow";
 	export interface XText extends Text {
-		startPosition: number;
-		endPosition: number;
+			startPosition: number;
+			endPosition: number;
+	}
+	export class XSelection {
+			constructor(range: Range, xWindow: XWindow);
+			/**
+				* @export
+				* @return {Array.<XText>}
+				*/
+			getTextNodes(): Array<XText>;
+			getOccurrence(): {
+					nth: number;
+					position: number;
+					text?: string;
+			};
+			/**
+				* @export
+				* @return {XSelection}
+				*/
+			getSelection(): Selection;
+			empty(): void;
 	}
 }
 
