@@ -1,7 +1,7 @@
 {
   "name": "jselection",
-  "version": "0.1.1",
-  "description": "Example git project that is used for typescript libraries as a starter pack",
+  "version": "0.1.2",
+  "description": "extended '''Selection''' class allows selecting by content and index",
   "main": "dist/jSelection.js",
   "typings": "dist/jSelection.d.ts",
   "jam": {
@@ -25,22 +25,13 @@
     "url": "git+https://github.com/webrary/jSelection.git"
   },
   "keywords": [
-    "example",
     "typescript",
     "library",
-    "starter",
     "webpack",
     "browserify",
-    "dts-bundle",
-    "package",
-    "tslint",
-    "jest",
-    "babel",
-    "tsloader",
-    "boilerplate",
-    "awesome-typescript-loader"
+    "Selection"
   ],
-  "author": "Hagai Cohen",
+  "author": "Ming",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/webrary/jSelection/issues"
