@@ -5,7 +5,9 @@ __Extended `Selection` series allows selecting by content and index__
 
 ## Installation
 ``` bash
-   npm install jselection --save //or
+   npm install jselection --save
+```
+``` bash
    bower install jselection  --save
 ```
 
