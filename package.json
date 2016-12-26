@@ -1,6 +1,6 @@
 {
   "name": "jselection",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "extended '''Selection''' class allows selecting by content and index",
   "main": "dist/jSelection.js",
   "typings": "dist/jSelection.d.ts",
