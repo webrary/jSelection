@@ -1,7 +1,7 @@
 # jSelection
-[![NPM version](https://img.shields.io/npm/v/jSelection.svg)](https://www.npmjs.com/package/jselection)
+__Extended `Selection` series allows selecting by content and index__
 
-Extended **`Selection`** series allows selecting by content and index
+[![NPM version](https://img.shields.io/npm/v/jSelection.svg)](https://www.npmjs.com/package/jselection)
 
 ## Installation
 ``` bash
@@ -25,7 +25,7 @@ import * as jSelection from "jSelection";
 // jSelection.XWindow.from(...);
 ```
 * __with `require`__
-```
+``` javascript
 const jSelection = require("jSelection");
 ```
 
