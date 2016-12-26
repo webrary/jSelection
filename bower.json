@@ -1,11 +1,29 @@
 {
   "name": "jselection",
-  "description": "extended selection",
-  "main": "index.js",
+  "version": "0.1.2",
+  "description": "extended '''Selection''' class allows selecting by content and index",
+  "main": "dist/jSelection.js",
+  "typings": "dist/jSelection.d.ts",
+  "jam": {
+    "main": "./dist/jSelection.browser.js"
+  },
+  "browser": {
+    "dist/main.js": "./dist/jSelection.browser.js"
+  },
   "authors": [
-    "ming"
+    "webrary"
   ],
-  "license": "ISC",
+  "keywords": [
+    "typescript",
+    "library",
+    "webpack",
+    "browserify",
+    "Selection"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/webrary/jSelection/issues"
+  },
   "homepage": "https://github.com/webrary/jSelection",
   "ignore": [
     "**/.*",
