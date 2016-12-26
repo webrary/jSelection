@@ -17,7 +17,6 @@ declare module 'jSelection/xWindow' {
 				* @return {XSelection}
 				*/
 			select(opt_text?: string, opt_nth?: number, opt_select?: boolean): XSelection;
-			init(root: Element): void;
 			static from(root?: Element): XWindow;
 			getNodes(): Array<XText>;
 			getText(): String;
@@ -27,28 +26,49 @@ declare module 'jSelection/xWindow' {
 
 declare module 'jSelection/xSelection' {
 	import { XWindow } from "jSelection/xWindow";
+	import { Occurrence } from "jSelection/xString";
 	export interface XText extends Text {
-			startPosition: number;
-			endPosition: number;
+		startPosition: number;
+		endPosition: number;
 	}
 	export class XSelection {
-			constructor(range: Range, xWindow: XWindow);
+		constructor(range: Range, xWindow: XWindow);
+		getTextNodes(): Array<XText>;
+		getOccurrence(): Occurrence;
+		getContent(): string;
+		getSelection(): Selection;
+		empty(): void;
+	}
+}
+
+declare module 'jSelection/xString' {
+	export class XString {
+			static from(origin: string): XString;
 			/**
-				* @export
-				* @return {Array.<XText>}
+				* the position of the nth occurrence of searchString
+				* @param {string} searchString
+				* @param {number} nth = 1
+				* @return {number} start position of the nth occurrence of <em>searchString</em>
 				*/
-			getTextNodes(): Array<XText>;
-			getOccurrence(): {
-					nth: number;
-					position: number;
-					text?: string;
-			};
+			indexOf(searchString: string, nth?: number): number;
 			/**
-				* @export
-				* @return {XSelection}
+				* the occurrences(include the positions) of searchString
+				* @param searchString
+				* @returns {Array<Occurrence>}
 				*/
-			getSelection(): Selection;
-			empty(): void;
+			find(searchString: string): Array<Occurrence>;
+			/**
+				* @return {string} compacted string
+				*/
+			compact(): string;
+			/**
+				* @return {string} trimmed string
+				*/
+			trim(): string;
+	}
+	export interface Occurrence {
+			nth: number;
+			position: number;
 	}
 }
 

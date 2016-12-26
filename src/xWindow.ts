@@ -19,12 +19,12 @@ export class XWindow {
      * @return {XSelection}
      */
     public select(opt_text?: string, opt_nth: number = 1, opt_select: boolean = false): XSelection {
-        var window_ = this.getWindow();
-        var selection = window_.getSelection();
+        let window_ = this.getWindow();
+        let selection = window_.getSelection();
         if (!opt_text) {
             return (selection.rangeCount > 0) ? (this.selection_ = new XSelection(window_.getSelection().getRangeAt(0), this)) : null;
         }
-        var range = this.rangeFrom_(opt_text, opt_nth);
+        let range = this.rangeFrom_(opt_text, opt_nth);
         if (opt_select) {
             selection.removeAllRanges();
             selection.addRange(range);
@@ -44,8 +44,9 @@ export class XWindow {
      */
     private rangeFrom_(text: string, nth: number = 1): Range {
 
-        function offset(str:string, count:number, isStart:number):number {
-            for (var i = 0, j = 0; i < count + isStart; j++) {
+        function offset(str: string, count: number, isStart: number): number {
+            let i = 0, j = 0;
+            for (; i < count + isStart; j++) {
                 if (!/\s+/m.test(str[j])) {
                     i++;
                 }
@@ -59,14 +60,14 @@ export class XWindow {
             let bText: string = this.text;
             let bNodes: Array<XText> = this.nodes;
             let range: Range = this.document_.createRange();
-            let cText: string = XString.compact(text);
-            let index: number = XString.nthIndexOf(bText, cText, nth || 1);
+            let cText: string = XString.from(text).compact();
+            let index: number = XString.from(bText).indexOf(cText, nth || 1);
             if (index > -1) {
                 let cStartPos: number = index + bNodes[0].startPosition;//include the first character
                 let cEndPos: number = cStartPos + cText.length;//exclude the last character
 
                 let startContainer: XText = null, endContainer: XText = null;
-                for (var i = 0; i < bNodes.length; i++) {
+                for (let i = 0; i < bNodes.length; i++) {
                     let node: XText = bNodes[i];
                     if (!startContainer && node.endPosition >= cStartPos) {
                         startContainer = bNodes[i];
@@ -78,8 +79,8 @@ export class XWindow {
                 }
                 if (startContainer !== null) {
                     endContainer = endContainer || bNodes[bNodes.length - 1];
-                    var startOffset = offset(startContainer.data, cStartPos - startContainer.startPosition, 1);
-                    var endOffset = offset(endContainer.data, cEndPos - endContainer.startPosition, 0);
+                    let startOffset = offset(startContainer.data, cStartPos - startContainer.startPosition, 1);
+                    let endOffset = offset(endContainer.data, cEndPos - endContainer.startPosition, 0);
                     range.setStart(startContainer, startOffset);
                     range.setEnd(endContainer, endOffset);
                 }
@@ -88,10 +89,10 @@ export class XWindow {
         }
     }
 
-    public init(root: Element): void {
-        function getTextNodes(element:Element):XText[] {
-            var nodes:Array<XText> = [];
-            var elesToSkip = {
+    private init(root: Element): void {
+        function getTextNodes(element: Element): XText[] {
+            let nodes: Array<XText> = [];
+            let elesToSkip = {
                 elements: ['applet', 'area', 'base', 'basefont', 'bdo', 'button', 'frame', 'frameset', 'iframe',
                     'head', 'hr', 'img', 'input', 'link', 'map', 'meta', 'noframes', 'noscript', 'optgroup',
                     'option', 'param', 'script', 'select', 'style', 'textarea', 'title'],
@@ -100,8 +101,8 @@ export class XWindow {
                  * @param {Array.<string>|null} list
                  * @return {boolean}
                  */
-                test: function (node:Element, list:Array<string>) {
-                    var elements = list || this.elements;
+                test: function (node: Element, list: Array<string>) {
+                    let elements = list || this.elements;
                     return elements.indexOf(node.tagName.toLowerCase()) > -1;
                 }
             };
@@ -110,7 +111,7 @@ export class XWindow {
                 if (element.nodeType === 3 && /\S/.test((<Text>element).data)) {
                     nodes.push(<XText>element);
                 } else if (element.nodeType === 1 && !elesToSkip.test(<Element>element, null)) {
-                    for (var i = 0, len = element.childNodes.length; i < len; ++i) {
+                    for (let i = 0, len = element.childNodes.length; i < len; ++i) {
                         filter(element.childNodes[i]);
                     }
                 }
@@ -124,7 +125,7 @@ export class XWindow {
         let xText: string = '';
         xTextNodes.forEach(function (node: XText) {
             node.startPosition = position;
-            var cText = XString.compact(node.data);
+            let cText = XString.from(node.data).compact();
             xText += cText;
             position += cText.length;
             node.endPosition = position - 1;

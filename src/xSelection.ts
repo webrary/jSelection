@@ -1,5 +1,5 @@
 import {XWindow} from "./xWindow";
-import {XString} from "./xString";
+import {XString, Occurrence} from "./xString";
 
 export interface XText extends Text {
     startPosition: number;
@@ -15,15 +15,10 @@ export class XSelection {
         this.window_ = xWindow;
     }
 
-    /**
-     * @export
-     * @return {Array.<XText>}
-     */
     public getTextNodes(): Array<XText> {
-
-        function split(container:XText, offset: number) {
-            var rp: XText = <XText>container.splitText(offset);
-            rp.startPosition = container.startPosition + XString.compact(container.data).length;
+        function split(container: XText, offset: number):XText {
+            let rp: XText = <XText>container.splitText(offset);
+            rp.startPosition = container.startPosition + XString.from(container.data).compact().length;
             rp.endPosition = container.endPosition;
             container.endPosition = rp.startPosition - 1;
             return rp;
@@ -31,9 +26,9 @@ export class XSelection {
 
         let sc: XText = <XText>(this.range_.startContainer), ec: XText = <XText>(this.range_.endContainer),
             so = this.range_.startOffset, eo = this.range_.endOffset;
-        var bNodes = this.window_.getNodes();
-        var si = bNodes.indexOf(sc);
-        var srp = split(sc, so);
+        let bNodes = this.window_.getNodes();
+        let si = bNodes.indexOf(sc);
+        let srp = split(sc, so);
         if (srp.length > 0) {
             bNodes.splice(si + 1, 0, srp);
         }
@@ -41,35 +36,38 @@ export class XSelection {
             ec = srp;
             eo = eo - so;
         }
-        var ei = bNodes.indexOf(ec);
-        var erp = split(ec, eo);
+        let ei = bNodes.indexOf(ec);
+        let erp = split(ec, eo);
         if (erp.length > 0) {
             bNodes.splice(ei + 1, 0, erp);
         }
         return bNodes.slice(si + 1, ei + 1);
     }
 
-    public getOccurrence(): {nth: number,position: number,text?: string} {
+    public getOccurrence(): Occurrence {
         let container: XText = <XText>this.range_.endContainer;
         if (container.nodeType != 3 || this.range_.startContainer.nodeType != 3) {
             throw new Error('illegal selection');
         }
         let offset: number = this.range_.endOffset;
-        let cHead: String = XString.compact(container.substringData(0, offset));
+        let cHead: String = XString.from(container.substringData(0, offset)).compact();
         let cLength: number = cHead ? cHead.length : 0;
         if (cLength < 1) {
             throw new Error('illegal selection');
         }
-        let cText: string = XString.compact(this.range_.toString());
-        let occurrence:{nth:number,position:number,text?:string} = XString.times(this.window_.getText().substr(0, container.startPosition + cLength), cText);
-        occurrence.text = cText;
-        return occurrence;
+        let cText: string = XString.from(this.range_.toString()).compact();
+        let content: string = this.window_.getText().substr(0, container.startPosition + cLength);
+        let occurrences: Array<Occurrence> = XString.from(content).find(cText);
+        if (occurrences && occurrences.length > 0) {
+            return occurrences[occurrences.length - 1];
+        }
+        throw new Error('illegal selection');
     }
 
-    /**
-     * @export
-     * @return {XSelection}
-     */
+    public getContent():string{
+        return this.range_.toString();
+    }
+
     public getSelection(): Selection {
         let selection: Selection = this.window_.getWindow().getSelection();
         if (selection.rangeCount < 1) {
@@ -79,7 +77,7 @@ export class XSelection {
     }
 
     public empty() {
-        var window_ = this.window_.getWindow();
+        let window_ = this.window_.getWindow();
         if (window_.getSelection().empty) {  // Chrome
             window_.getSelection().empty();
         } else if (window_.getSelection().removeAllRanges) {  // Firefox

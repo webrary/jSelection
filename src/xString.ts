@@ -1,17 +1,24 @@
 export class XString {
+    private str_: string;
+
+    public static from(origin: string): XString {
+        return new XString(origin);
+    }
+
+    private constructor(origin: string) {
+        this.str_ = origin;
+    }
 
     /**
      * the position of the nth occurrence of searchString
-     * @param {string} content
      * @param {string} searchString
      * @param {number} nth = 1
      * @return {number} start position of the nth occurrence of <em>searchString</em>
      */
-    public static nthIndexOf(content: string, searchString: string, nth: number = 1) {
-        var times = 0, index = -2;
-        nth = (nth = parseInt('' + nth, 10)) && nth > 0 ? nth : 1;
+    public indexOf(searchString: string, nth: number = 1): number {
+        let times = 0, index = -2;
         while (times < nth && index !== -1) {
-            index = content.indexOf(searchString, index + 1);
+            index = this.str_.indexOf(searchString, index + 1);
             times++;
         }
         return index;
@@ -19,20 +26,16 @@ export class XString {
 
     /**
      * the occurrences(include the positions) of searchString
-     * @param {string} content
-     * @param {string} searchString
-     * @return {Array.<{nth,position}>} list of the occurrences
+     * @param searchString
+     * @returns {Array<Occurrence>}
      */
-    public static occurrences(content: string, searchString: string): Array<{nth: number,position: number}> {
-        var times = 0, position = -2, result: Array<{nth: number,position: number}> = [];
+    public find(searchString: string): Array<Occurrence> {
+        let times = 0, position = -2, result: Array<Occurrence> = [];
         if (searchString.length < 1) {
-            return [
-                {nth: Number.POSITIVE_INFINITY, position: Number.POSITIVE_INFINITY},
-                {nth: Number.POSITIVE_INFINITY, position: -1}
-            ];
+            return result;
         }
         while (position !== -1) {
-            position = content.indexOf(searchString, position + 1);
+            position = this.str_.indexOf(searchString, position + 1);
             if (position < 0) {
                 break;
             }
@@ -41,34 +44,22 @@ export class XString {
         return result;
     }
 
-
     /**
-     * the occurrences of searchString
-     * @param {string} content
-     * @param {string} searchString
-     * @return {{nth,position}|null}
-     */
-    public static times(content: string, searchString: string) {
-        var occurs = XString.occurrences(content, searchString);
-        var temp = occurs[occurs.length - 1];
-        return temp ? temp : null;
-    }
-
-
-    /**
-     * @param {string} content content to be compact
      * @return {string} compacted string
      */
-    public static compact(content: string) {
-        return content.replace(/\s+/gm, '');
+    public compact(): string {
+        return this.str_.replace(/\s+/gm, '');
     }
-
 
     /**
-     * @param {string} content string to be trimmed
      * @return {string} trimmed string
      */
-    public static trim(content: string) {
-        return content.replace(/(^\s*)|(\s*$)/g, '');
+    public trim(): string {
+        return this.str_.replace(/(^\s*)|(\s*$)/g, '');
     }
+}
+
+export interface Occurrence {
+    nth: number;
+    position: number;
 }

@@ -1,54 +1,110 @@
 # jSelection
 [![NPM version](https://img.shields.io/npm/v/jSelection.svg)](https://www.npmjs.com/package/jselection)
-[![Build Status](https://travis-ci.org/DxCx/jSelection.svg?branch=master)](https://travis-ci.org/DxCx/jselection)
-[![Coverage Status](https://coveralls.io/repos/github/DxCx/jselection/badge.svg?branch=master)](https://coveralls.io/github/DxCx/jselection?branch=master)
-[![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
 
-Example git project that is used for typescript libraries as a starter pack
+Extended **`Selection`** series allows selecting by content and index
 
-What does it include:
-----
-    1. exported class as example for an npm moudle
-    2. packaging for npm modules (webpack + tslint + awesome-typescript-loader + dts-bundle)
-    3. testings for npm modules (jest)
-    4. code coverage (jest) when running tests
-    5. Typescript => ES6 => ES5 (babel)
-    6. Two versions embed in the package, one for node, one for browser (browserify)
+## Installation
+``` bash
+   npm install jselection --save //or
+   bower install jselection  --save
+```
 
-Notes
-----
-Please note that you will need to rename the library name in some files:
+## Usage
+* __with `<script>`(in browser)__
+``` html
+<script type="application/javascript" src="node_modules/jselection/dist/jSelection.browser.js"></script>
+```
+* __with `import`(in Typescript / ES6)__
+``` typescript
+import {XWindow, XSelection} from "jSelection";
+// XWindow.from(...);
+```
+or 
+``` typescript
+import * as jSelection from "jSelection";
+// jSelection.XWindow.from(...);
+```
+* __with `require`__
+```
+const jSelection = require("jSelection");
+```
 
-    1. webpack.config.js (bundle_opts)
-    2. package.json (ofcourse ;))
-Also don't forget to reset package version ;)
+## API
+### **`XWindow`**: Extended **`Window`** class 
 
-Useful commands:
-----
-    npm run prebuild       - install NPM dependancies
-    npm run build          - build the library files
-    npm run test           - run the tests
-    npm run test:watch     - run the tests (watch-mode)
-    npm run coverage       - run the tests with coverage
-    npm run coverage:watch - run the tests with coverage (watch-mode)
-    npm run pack           - build the library, make sure the tests passes, and then pack the library (creates .tgz)
-    npm run release        - prepare package for next release
+#### `XWindow.from`
+__create instance from a html `Element`(a `XWindow` instance is created and returned)__
+``` typescript
+public static from(root: Element = document.body): XWindow;
+```
+* create `XWindow` from element with ID `body`
+``` javascript
+let xWindow = XWindow.from(document.querySelector('#body'));
+```
 
-Files explained:
-----
-    1. src - directory is used for typescript code that is part of the project
-        1a. src/Example.ts - Just an example exported library, used to should import in tests.
-        1b. src/Example.spec.ts - tests for the example class
-        1c. src/index.ts        - index, which functionality is exported from the library
-        1d. src/main.ts         - just wrapper for index
-    3. package.json                 - file is used to describe the library
-    4. tsconfig.json                - configuration file for the library compilation
-    6. tslint.json                  - configuration file for the linter (both test and library)
-    8. webpack.config.js            - configuration file of the compilation automation process for the library
+#### `XWindow.select`
+__select by content and index (a `XSelection` instance is created and returned)__
+``` typescript
+public select(opt_text?: string, opt_nth: number = 1, opt_select: boolean = false): XSelection;
+```
+* select the 5th `hello` (create `XSelection` instance from the 5th `hello`)
+``` javascript
+let xSelection = xWindow.select("hello", 5);
+```
+* select by Mouse (create `XSelection` instance from the Mouse selected text)
+``` javascript
+let xSelection = xWindow.select();
+```
 
-Output files explained:
-----
-    1. node_modules                       - directory npm creates with all the dependencies of the module (result of npm install)
-    2. dist                               - directory contains the compiled library (javascript + typings)
-    3. <module_name>-<module_version>.tgz - final tgz file for publish. (result of npm run pack)
-    4. coverage                           - code coverage report output made by istanbul
+### __`XSelection`__: Extended __`Selection`__ class
+
+#### `XSelection.getTextNodes`
+__get `Text` Nodes of the `XSelection`__
+``` typescript
+public getTextNodes(): Array<XText>;
+interface XText extends Text {...}
+```
+
+#### `XSelection.getOccurrence`
+__get the `Occurrence` of the selected text from `XSelection` instance__
+``` typescript
+public getOccurrence(): Occurrence;
+
+interface Occurrence {
+    nth: number; //the content is the `nth` occurrence
+    position: number; //the content starts at `position`
+}
+```
+
+## Example
+``` html
+<html lang="en">
+<head>
+    <script type="application/javascript" src="dist/jSelection.browser.js"></script>
+    <script type="application/javascript" src="bower_components/jQuery/dist/jquery.min.js"></script>
+    <style type="text/css">
+        .markup {
+            background-color: yellowgreen;
+        }
+    </style>
+</head>
+<body>
+text start: 
+<div id="body">
+    this is a test
+    <span>this is a test</span>
+    this is a test
+    <p> this is a test </p>
+    this is a test
+</div>
+text end: 
+<script type="application/javascript">
+    var xWindow = jSelection.XWindow.from(document.querySelector("#body"));
+    var xSelection = xWindow.select("test", 5);
+    var nodes = xSelection.getTextNodes();
+    console.log(nodes);
+    var markup = $(nodes).wrapAll("<span class='markup'/>");
+</script>
+</body>
+</html>
+```
