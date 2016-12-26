@@ -19,7 +19,6 @@ __Extended `Selection` series allows selecting by content and index__
 import {XWindow, XSelection} from "jSelection";
 // XWindow.from(...);
 ```
-or 
 ``` typescript
 import * as jSelection from "jSelection";
 // jSelection.XWindow.from(...);
