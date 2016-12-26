@@ -4,10 +4,10 @@ __Extended `Selection` series allows selecting by content and index__
 [![NPM version](https://img.shields.io/npm/v/jSelection.svg)](https://www.npmjs.com/package/jselection)
 
 ## Installation
-``` bash
+``` shell
    npm install jselection --save
 ```
-``` bash
+``` shell
    bower install jselection  --save
 ```
 
