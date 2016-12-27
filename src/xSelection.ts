@@ -16,7 +16,7 @@ export class XSelection {
     }
 
     public getTextNodes(): Array<XText> {
-        function split(container: XText, offset: number):XText {
+        function split(container: XText, offset: number): XText {
             let rp: XText = <XText>container.splitText(offset);
             rp.startPosition = container.startPosition + XString.from(container.data).compact().length;
             rp.endPosition = container.endPosition;
@@ -64,7 +64,7 @@ export class XSelection {
         throw new Error('illegal selection');
     }
 
-    public getContent():string{
+    public getContent(): string {
         return this.range_.toString();
     }
 
@@ -83,5 +83,11 @@ export class XSelection {
         } else if (window_.getSelection().removeAllRanges) {  // Firefox
             window_.getSelection().removeAllRanges();
         }
+    }
+
+    public cancel() {
+        var nodes = this.getTextNodes();
+        nodes[0].parentNode.normalize();
+        nodes[nodes.length - 1].parentNode.normalize();
     }
 }
