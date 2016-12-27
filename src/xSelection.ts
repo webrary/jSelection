@@ -17,7 +17,7 @@ export class XSelection {
     }
 
     public getTextNodes(): Array<XText> {
-        if(this.nodes_)
+        if (this.nodes_)
             return this.nodes_;
         function split(container: XText, offset: number): XText {
             let rp: XText = <XText>container.splitText(offset);
@@ -81,12 +81,8 @@ export class XSelection {
     }
 
     public empty() {
-        let window_ = this.window_.getWindow();
-        if (window_.getSelection().empty) {  // Chrome
-            window_.getSelection().empty();
-        } else if (window_.getSelection().removeAllRanges) {  // Firefox
-            window_.getSelection().removeAllRanges();
-        }
+        this.getSelection().empty && this.getSelection().empty();
+        this.getSelection().removeAllRanges && this.getSelection().removeAllRanges();
     }
 
     public cancel() {

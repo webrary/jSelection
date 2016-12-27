@@ -19,7 +19,8 @@ export class XWindow {
      * @return {XSelection}
      */
     public select(opt_text?: string, opt_nth: number = 1, opt_select: boolean = false): XSelection {
-        this.selection_ && this.selection_.cancel();
+        this.selection_ && this.selection_.cancel() && this.selection_.getSelection().empty();
+        this.selection_ = null;
         let window_ = this.getWindow();
         let selection = window_.getSelection();
         if (!opt_text) {
