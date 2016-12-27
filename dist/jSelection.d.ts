@@ -38,6 +38,7 @@ declare module 'jSelection/xSelection' {
 		getContent(): string;
 		getSelection(): Selection;
 		empty(): void;
+		cancel(): void;
 	}
 }
 
