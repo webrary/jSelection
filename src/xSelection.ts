@@ -9,6 +9,7 @@ export interface XText extends Text {
 export class XSelection {
     private range_: Range = null;
     private window_: XWindow = null;
+    private nodes_: Array<XText>;
 
     constructor(range: Range, xWindow: XWindow) {
         this.range_ = range;
@@ -16,6 +17,8 @@ export class XSelection {
     }
 
     public getTextNodes(): Array<XText> {
+        if(this.nodes_)
+            return this.nodes_;
         function split(container: XText, offset: number): XText {
             let rp: XText = <XText>container.splitText(offset);
             rp.startPosition = container.startPosition + XString.from(container.data).compact().length;
@@ -41,7 +44,8 @@ export class XSelection {
         if (erp.length > 0) {
             bNodes.splice(ei + 1, 0, erp);
         }
-        return bNodes.slice(si + 1, ei + 1);
+        this.nodes_ = bNodes.slice(si + 1, ei + 1);
+        return this.nodes_;
     }
 
     public getOccurrence(): Occurrence {
