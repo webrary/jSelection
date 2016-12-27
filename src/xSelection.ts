@@ -86,8 +86,9 @@ export class XSelection {
     }
 
     public cancel() {
-        var nodes = this.getTextNodes();
-        nodes[0].parentNode.normalize();
-        nodes[nodes.length - 1].parentNode.normalize();
+        let nodes = this.getTextNodes();
+        let first = nodes[0], last = nodes[nodes.length - 1];
+        first && first.parentNode && first.parentNode.normalize();
+        last && last.parentNode && last.parentNode.normalize();
     }
 }
