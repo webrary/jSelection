@@ -1,0 +1,8 @@
+.prettierrc
+.idea
+src
+tsconfig.json
+tslint.json
+index.html
+jSelection.iml
+webpack.config.js

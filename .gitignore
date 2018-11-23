@@ -4,8 +4,7 @@ npm-debug.log*
 
 build/Release
 node_modules
-bower_components
-jspm_packages
+dist
 .idea
 .npm
 .node_repl_history

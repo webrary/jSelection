@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script type="application/javascript" src="dist/jSelection.browser.js"></script>
+  <script type="application/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+  <style type="text/css">
+    .markup {
+      background-color: yellowgreen;
+    }
+  </style>
+</head>
+<body>
+haha
+<div id="body">
+  this is a test
+  <span>this is a test</span>
+  this is a test
+  <p> this is a test </p>
+  this is a test
+</div>
+<div id="console">
+
+</div>
+<script type="application/javascript">
+  const xWindow = jSelection.XWindow.from(document.querySelector('#body'));
+  console.log(xWindow.getNodes());
+  const xSelection = xWindow.select('a test', 3);
+  const nodes = xSelection.getTextNodes();
+  console.log(nodes);
+  const markup = $(nodes[0]).wrapAll('<span class=\'markup\'/>');
+  const $console = $('#console');
+  document.addEventListener('mouseup', () => {
+    let xSelection = xWindow.select();
+    if (xSelection) {
+      let content = JSON.stringify(xSelection.getOccurrence());
+      $console.append($('<p/>').html(xSelection.getContent() + ':' + content));
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,94 +1,120 @@
-import {XWindow} from "./xWindow";
-import {XString, Occurrence} from "./xString";
+import { IOccurrence, XString } from './xString';
+import { XWindow } from './xWindow';
 
-export interface XText extends Text {
-    startPosition: number;
-    endPosition: number;
+export interface IXText extends Text {
+  startPosition: number;
+  endPosition: number;
 }
 
 export class XSelection {
-    private range_: Range = null;
-    private window_: XWindow = null;
-    private nodes_: Array<XText>;
+  private readonly xRange: Range;
+  private xWindow: XWindow;
+  private xNodes: IXText[]|undefined;
 
-    constructor(range: Range, xWindow: XWindow) {
-        this.range_ = range;
-        this.window_ = xWindow;
+  constructor(range: Range, xWindow: XWindow) {
+    this.xRange = range;
+    this.xWindow = xWindow;
+  }
+
+  public getTextNodes(): IXText[] {
+    if (this.xNodes) {
+      return this.xNodes;
     }
 
-    public getTextNodes(): Array<XText> {
-        if (this.nodes_)
-            return this.nodes_;
-        function split(container: XText, offset: number): XText {
-            let rp: XText = <XText>container.splitText(offset);
-            rp.startPosition = container.startPosition + XString.from(container.data).compact().length;
-            rp.endPosition = container.endPosition;
-            container.endPosition = rp.startPosition - 1;
-            return rp;
-        }
-
-        let sc: XText = <XText>(this.range_.startContainer), ec: XText = <XText>(this.range_.endContainer),
-            so = this.range_.startOffset, eo = this.range_.endOffset;
-        let bNodes = this.window_.getNodes();
-        let si = bNodes.indexOf(sc);
-        let srp = split(sc, so);
-        if (srp.length > 0) {
-            bNodes.splice(si + 1, 0, srp);
-        }
-        if (ec === sc) {
-            ec = srp;
-            eo = eo - so;
-        }
-        let ei = bNodes.indexOf(ec);
-        let erp = split(ec, eo);
-        if (erp.length > 0) {
-            bNodes.splice(ei + 1, 0, erp);
-        }
-        this.nodes_ = bNodes.slice(si + 1, ei + 1);
-        return this.nodes_;
+    function split(container: IXText, offset: number): IXText {
+      const rp: IXText = container.splitText(offset) as IXText;
+      rp.startPosition = container.startPosition + XString.from(container.data).compact().length;
+      rp.endPosition = container.endPosition;
+      container.endPosition = rp.startPosition - 1;
+      return rp;
     }
 
-    public getOccurrence(): Occurrence {
-        let container: XText = <XText>this.range_.endContainer;
-        if (container.nodeType != 3 || this.range_.startContainer.nodeType != 3) {
-            throw new Error('illegal selection');
-        }
-        let offset: number = this.range_.endOffset;
-        let cHead: String = XString.from(container.substringData(0, offset)).compact();
-        let cLength: number = cHead ? cHead.length : 0;
-        if (cLength < 1) {
-            throw new Error('illegal selection');
-        }
-        let cText: string = XString.from(this.range_.toString()).compact();
-        let content: string = this.window_.getText().substr(0, container.startPosition + cLength);
-        let occurrences: Array<Occurrence> = XString.from(content).find(cText);
-        if (occurrences && occurrences.length > 0) {
-            return occurrences[occurrences.length - 1];
-        }
-        throw new Error('illegal selection');
+    const sc: IXText = this.xRange.startContainer as IXText;
+    let ec: IXText = this.xRange.endContainer as IXText;
+    const so = this.xRange.startOffset;
+    let eo = this.xRange.endOffset;
+    const bNodes = this.xWindow.getNodes();
+    const si = bNodes.indexOf(sc);
+    const srp = split(sc, so);
+    if (srp.length > 0) {
+      bNodes.splice(si + 1, 0, srp);
+    }
+    if (ec === sc) {
+      ec = srp;
+      eo = eo - so;
+    }
+    const ei = bNodes.indexOf(ec);
+    const erp = split(ec, eo);
+    if (erp.length > 0) {
+      bNodes.splice(ei + 1, 0, erp);
+    }
+    this.xNodes = bNodes.slice(si + 1, ei + 1);
+    return this.xNodes;
+  }
+
+  public getOccurrence(): IOccurrence {
+    const container: IXText = this.xRange.endContainer as IXText;
+    if (container.nodeType !== 3 || this.xRange.startContainer.nodeType !== 3) {
+      throw new Error('illegal selection');
+    }
+    const offset: number = this.xRange.endOffset;
+    const cHead: string = XString.from(container.substringData(0, offset)).compact();
+    const cLength: number = cHead ? cHead.length : 0;
+    if (cLength < 1) {
+      throw new Error('illegal selection');
+    }
+    const cText: string = XString.from(this.xRange.toString()).compact();
+    const content: string = this.xWindow.getText().substr(0, container.startPosition + cLength);
+    const occurrences: IOccurrence[] = XString.from(content).find(cText);
+    if (occurrences && occurrences.length > 0) {
+      return occurrences[occurrences.length - 1];
+    }
+    throw new Error('illegal selection');
+  }
+
+  public getContent(): string {
+    return this.xRange.toString();
+  }
+
+  public getSelection(): Selection {
+    const selection: Selection = this.xWindow.getWindow().getSelection();
+    if (selection.rangeCount < 1) {
+      selection.addRange(this.xRange);
+    }
+    return selection;
+  }
+
+  public empty() {
+    if (this.getSelection().empty) {
+      this.getSelection().empty();
+    }
+    if (this.getSelection().removeAllRanges) {
+      this.getSelection().removeAllRanges();
+    }
+  }
+
+  public cancel() {
+    const nodes = this.getTextNodes();
+    const first: IXText = nodes[0];
+    const last: IXText = nodes[nodes.length - 1];
+    if (first && first.parentNode) {
+      first.parentNode.normalize();
+    }
+    if (last && last.parentNode) {
+      last.parentNode.normalize();
     }
 
-    public getContent(): string {
-        return this.range_.toString();
-    }
+    const bNodes: IXText[] = this.xWindow.getNodes();
+    const fi = bNodes.indexOf(first);
+    const li = bNodes.indexOf(last);
 
-    public getSelection(): Selection {
-        let selection: Selection = this.window_.getWindow().getSelection();
-        if (selection.rangeCount < 1) {
-            selection.addRange(this.range_);
-        }
-        return selection;
+    if (li < bNodes.length - 1 && last.nextSibling === bNodes[li + 1]) {
+      last.endPosition = bNodes[li + 1].endPosition;
+      bNodes.splice(li + 1, 1);
     }
-
-    public empty() {
-        this.getSelection().empty && this.getSelection().empty();
-        this.getSelection().removeAllRanges && this.getSelection().removeAllRanges();
+    if (fi > 0 && first.previousSibling === bNodes[fi - 1]) {
+      bNodes[fi - 1].endPosition = first.endPosition;
+      bNodes.splice(fi, 1);
     }
-
-    public cancel() {
-        let nodes = this.getTextNodes();
-        let first = nodes[0], last = nodes[nodes.length - 1];
-        first && first.parentNode && first.parentNode.normalize();
-        last && last.parentNode && last.parentNode.normalize();
-    }
+  }
 }
